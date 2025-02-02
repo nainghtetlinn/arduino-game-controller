@@ -15,18 +15,17 @@ const int ledPincc = 14;
 const int playerC_abcPin = 34;
 
 // game states
-String playerA, playerB, playerC;
-int playerA_value;
-int playerB_value;
-int playerC_value;
+String playerA = "0";
+String playerB = "0";
+String playerC = "0";
 
 String receivedData = "";
 bool ableToAns = false;
+int playerCount = 0;
 int counter = 0;
 
 void setup()
 {
-
     Serial.begin(115200);
 
     pinMode(ledPinaa, OUTPUT);
@@ -38,17 +37,21 @@ void loop()
 {
     updateLeds();
 
-    playerA_value = analogRead(playerA_abcPin);
-
-    String message = "";
-
     if (Serial.available())
     {
         receivedData = Serial.readStringUntil('\n'); // Read data until newline
         if (receivedData.startsWith("PC:"))
         {
             if (receivedData.indexOf("choice:True") != -1)
+            {
                 ableToAns = true;
+                if (receivedData.indexOf("choice:True1") != -1)
+                    playerCount = 1;
+                else if (receivedData.indexOf("choice:True2") != -1)
+                    playerCount = 2;
+                else if (receivedData.indexOf("choice:True3") != -1)
+                    playerCount = 3;
+            }
             else if (receivedData.indexOf("choice:False") != -1)
                 ableToAns = false;
             else
@@ -58,40 +61,58 @@ void loop()
 
     if (ableToAns)
     {
+        int playerA_value = analogRead(playerA_abcPin);
+        int playerB_value = analogRead(playerB_abcPin);
+        int playerC_value = analogRead(playerC_abcPin);
+
         // message = "AR:{f:[A],s:[0],t:[0],c:[0]}";
         // player A answer
-        if (playerA_value < 1000)
-            playerA = "A";
-        else if (playerA_value >= 1600 && playerA_value < 2000)
-            playerA = "B";
-        else if (playerA_value >= 3600 && playerA_value < 4000)
-            playerA = "C";
-        else
-            playerA = "0";
+        if (playerA == "0" && playerA_value < 4000)
+        {
+            counter++;
+
+            if (playerA_value < 1000)
+                playerA = "A";
+            else if (playerA_value >= 1600 && playerA_value < 2000)
+                playerA = "B";
+            else if (playerA_value >= 3600)
+                playerA = "C";
+        }
 
         // player B answer
-        if (playerB_value < 1000)
-            playerB = "A";
-        else if (playerB_value >= 1600 && playerB_value < 2000)
-            playerB = "B";
-        else if (playerB_value >= 3600 && playerB_value < 4000)
-            playerB = "C";
-        else
-            playerB = "0";
+        if (playerB == "0" && playerB_value < 4000)
+        {
+            counter++;
+
+            if (playerB_value < 1000)
+                playerB = "A";
+            else if (playerB_value >= 1600 && playerB_value < 2000)
+                playerB = "B";
+            else if (playerB_value >= 3600)
+                playerB = "C";
+        }
 
         // player C answer
-        if (playerC_value < 1000)
-            playerC = "A";
-        else if (playerC_value >= 1600 && playerC_value < 2000)
-            playerC = "B";
-        else if (playerC_value >= 3600 && playerC_value < 4000)
-            playerC = "C";
-        else
-            playerC = "0";
+        if (playerC == "0" && playerC_value < 4000)
+        {
+            counter++;
 
-        message = "AR:{f:[" + playerA + "],s:[" + playerB + "],t:[" + playerC + "],c:[" + counter + "]}";
+            if (playerC_value < 1000)
+                playerC = "A";
+            else if (playerC_value >= 1600 && playerC_value < 2000)
+                playerC = "B";
+            else if (playerC_value >= 3600)
+                playerC = "C";
+        }
+
+        String message = "AR:{f:[" + playerA + "],s:[" + playerB + "],t:[" + playerC + "],c:[" + counter + "]}";
 
         Serial.println(message);
+
+        if (playerCount == counter)
+        {
+            ableToAns = false;
+        }
     }
 }
 
