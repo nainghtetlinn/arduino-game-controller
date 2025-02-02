@@ -67,43 +67,13 @@ void loop()
 
         // message = "AR:{f:[A],s:[0],t:[0],c:[0]}";
         // player A answer
-        if (playerA == "0" && playerA_value < 4000)
-        {
-            counter++;
-
-            if (playerA_value < 1000)
-                playerA = "A";
-            else if (playerA_value >= 1600 && playerA_value < 2000)
-                playerA = "B";
-            else if (playerA_value >= 3600)
-                playerA = "C";
-        }
+        updatePlayerState(playerA, playerA_value);
 
         // player B answer
-        if (playerB == "0" && playerB_value < 4000)
-        {
-            counter++;
-
-            if (playerB_value < 1000)
-                playerB = "A";
-            else if (playerB_value >= 1600 && playerB_value < 2000)
-                playerB = "B";
-            else if (playerB_value >= 3600)
-                playerB = "C";
-        }
+        updatePlayerState(playerB, playerB_value);
 
         // player C answer
-        if (playerC == "0" && playerC_value < 4000)
-        {
-            counter++;
-
-            if (playerC_value < 1000)
-                playerC = "A";
-            else if (playerC_value >= 1600 && playerC_value < 2000)
-                playerC = "B";
-            else if (playerC_value >= 3600)
-                playerC = "C";
-        }
+        updatePlayerState(playerC, playerC_value);
 
         String message = "AR:{f:[" + playerA + "],s:[" + playerB + "],t:[" + playerC + "],c:[" + counter + "]}";
 
@@ -113,6 +83,21 @@ void loop()
         {
             ableToAns = false;
         }
+    }
+}
+
+void updatePlayerState(String &player, int value)
+{
+    if (player == "0" && value < 4000)
+    {
+        counter++;
+
+        if (value < 1000)
+            player = "A";
+        else if (value >= 1600 && value < 2000)
+            player = "B";
+        else if (value >= 3600)
+            player = "C";
     }
 }
 
