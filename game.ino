@@ -34,6 +34,14 @@ void setup()
     pinMode(ledPinaa, OUTPUT);
     pinMode(ledPinab, OUTPUT);
     pinMode(ledPinac, OUTPUT);
+
+    pinMode(ledPinba, OUTPUT);
+    pinMode(ledPinbb, OUTPUT);
+    pinMode(ledPinbc, OUTPUT);
+
+    pinMode(ledPinca, OUTPUT);
+    pinMode(ledPincb, OUTPUT);
+    pinMode(ledPincc, OUTPUT);
 }
 
 void loop()
